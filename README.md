@@ -1,8 +1,7 @@
 # ironic_setup
-快速部署HPC裸机集群
+Rapid deployment of HPC bare metal clusters
 
-### Step1
-初始化netron网络的网卡配置
+### Step1 Initialize the network card configuration of the netron network
 
 ```
 
@@ -11,37 +10,54 @@ sudo chmod 755 *.sh
 sudo ./network-setup.sh
 sudo reboot
 
+
 ```
-### Step2
-配置系统语言环境
+
+
+### Step2 Initialize the system locale
 
 ```
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 sudo dpkg-reconfigure locales
+
 ```
 
-在弹出的图形界面中选择en_US.UTF-8的编码，保存退出
+select en_US.UTF-8 encode
 
-### Step3
-初始化kolla配置，部署基本ironic环境
+### Step3 Initializa kolla config build basic ironic env
 
 ```
 sudo ./kolla_setup.sh
 
 ```
 
-### Step4
+### Step4 ironic env init
 
 ```
-
-ironic初始环境setup
 sudo ./ironic_setup.sh
 
 ```
 
-### Step5
+### Step5 create node，boot instance
 
 ```
+sudo ./build_images.sh
+sudo ./gen_sshkey.sh
+sudo ./start_node.sh
+
+```
+
+### Tools Reploy kolla node
+
+```
+sudo ./re_deploy.sh
+
+```
+
+### Tools clean all deployed node
+
+```
+sudo ./clean_all_node.sh
 
 ```

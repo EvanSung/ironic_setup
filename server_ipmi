@@ -4,10 +4,10 @@ s1_ipmi_username=maas
 s1_ipmi_password=kFUxkfl56bK
 s1_nic_mac_address=00:1e:67:63:0b:58
 
-# Server002 ERROR
+# Server002
 s2_ipmi_address=192.168.1.203
-s2_ipmi_username=root
-s2_ipmi_password=cloud123
+s2_ipmi_username=maas
+s2_ipmi_password=baQ94XmyhX
 s2_nic_mac_address=00:1e:67:94:58:b1
 
 # Server003

@@ -31,7 +31,6 @@ ironic node-update $NODE1_UUID add  driver_info/ipmi_username=$s1_ipmi_username 
 driver_info/ipmi_password=$s1_ipmi_password  driver_info/ipmi_address=$s1_ipmi_address \
 driver_info/ipmi_terminal_port=623
 
-
 ironic node-update $NODE1_UUID add driver_info/deploy_kernel=$DEPLOY_VMLINUZ_UUID \
     driver_info/deploy_ramdisk=$DEPLOY_INITRD_UUID
 
@@ -65,7 +64,7 @@ nova flavor-key ai-bm-node2 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node2
-NODE1_UUID=$(ironic node-list|grep node1|awk -F "| " '{print $2}')
+NODE2_UUID=$(ironic node-list|grep node2|awk -F "| " '{print $2}')
 
 ironic node-update $NODE2_UUID add  driver_info/ipmi_username=$s2_ipmi_username   \
 driver_info/ipmi_password=$s2_ipmi_password  driver_info/ipmi_address=$s2_ipmi_address \
@@ -78,7 +77,7 @@ ironic node-update $NODE2_UUID add properties/cpus=${VCPUS}  properties/memory_m
  properties/local_gb=${DISK} properties/cpu_arch=${HOST_CPU_ARCH}
 
 openstack --os-baremetal-api-version 1.21 baremetal node set $NODE2_UUID \
-  --resource-class  CUSTOM_BAREMETAL_NODE1_AI
+  --resource-class  CUSTOM_BAREMETAL_NODE2_AI
 
 ironic port-create -n $NODE2_UUID -a $s2_nic_mac_address
 
@@ -100,7 +99,7 @@ nova flavor-key ai-bm-node3 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node3
-NODE1_UUID=$(ironic node-list|grep node1|awk -F "| " '{print $2}')
+NODE1_UUID=$(ironic node-list|grep node3|awk -F "| " '{print $2}')
 
 ironic node-update $NODE3_UUID add  driver_info/ipmi_username=$s3_ipmi_username   \
 driver_info/ipmi_password=$s3_ipmi_password  driver_info/ipmi_address=$s3_ipmi_address \
@@ -135,7 +134,7 @@ nova flavor-key ai-bm-node4 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node4
-NODE1_UUID=$(ironic node-list|grep node1|awk -F "| " '{print $2}')
+NODE1_UUID=$(ironic node-list|grep node4|awk -F "| " '{print $2}')
 
 ironic node-update $NODE4_UUID add  driver_info/ipmi_username=$s4_ipmi_username   \
 driver_info/ipmi_password=$s4_ipmi_password  driver_info/ipmi_address=$s4_ipmi_address \
@@ -170,7 +169,7 @@ nova flavor-key ai-bm-node5 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node5
-NODE1_UUID=$(ironic node-list|grep node1|awk -F "| " '{print $2}')
+NODE1_UUID=$(ironic node-list|grep node5|awk -F "| " '{print $2}')
 
 ironic node-update $NODE5_UUID add  driver_info/ipmi_username=$s5_ipmi_username   \
 driver_info/ipmi_password=$s5_ipmi_password  driver_info/ipmi_address=$s5_ipmi_address \
@@ -204,7 +203,7 @@ nova flavor-key ai-bm-node6 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node6
-NODE1_UUID=$(ironic node-list|grep node1|awk -F "| " '{print $2}')
+NODE1_UUID=$(ironic node-list|grep node6|awk -F "| " '{print $2}')
 
 ironic node-update $NODE6_UUID add  driver_info/ipmi_username=$s6_ipmi_username   \
 driver_info/ipmi_password=$s6_ipmi_password  driver_info/ipmi_address=$s6_ipmi_address \
