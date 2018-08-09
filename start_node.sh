@@ -9,8 +9,9 @@ VCPUS=32
 HOST_CPU_ARCH=x86_64
 export IRONIC_API_VERSION=1.20
 
-nova quota-class-update --ram 512000 default
-nova quota-class-update --cores 200 default
+nova quota-class-update --instances 50 default
+nova quota-class-update --ram 5120000 default
+nova quota-class-update --cores 2000 default
 
 DEPLOY_VMLINUZ_UUID=$(glance image-list|grep deploy-vmlinuz|awk -F "| " '{print $2}')
 DEPLOY_INITRD_UUID=$(glance image-list|grep deploy-initrd|awk -F "| " '{print $2}')
@@ -134,7 +135,7 @@ nova flavor-key ai-bm-node4 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node4
-NODE1_UUID=$(ironic node-list|grep node4|awk -F "| " '{print $2}')
+NODE4_UUID=$(ironic node-list|grep node4|awk -F "| " '{print $2}')
 
 ironic node-update $NODE4_UUID add  driver_info/ipmi_username=$s4_ipmi_username   \
 driver_info/ipmi_password=$s4_ipmi_password  driver_info/ipmi_address=$s4_ipmi_address \
@@ -154,7 +155,7 @@ ironic port-create -n $NODE4_UUID -a $s4_nic_mac_address
 ironic --ironic-api-version 1.20 node-set-provision-state $NODE4_UUID manage
 ironic --ironic-api-version 1.20 node-set-provision-state $NODE4_UUID provide
 
-openstack server create --image my-image --flavor ai-bm-node3 \
+openstack server create --image my-image --flavor ai-bm-node4 \
  --key-name mykey --network public1  node4
 
 
@@ -169,7 +170,7 @@ nova flavor-key ai-bm-node5 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node5
-NODE1_UUID=$(ironic node-list|grep node5|awk -F "| " '{print $2}')
+NODE5_UUID=$(ironic node-list|grep node5|awk -F "| " '{print $2}')
 
 ironic node-update $NODE5_UUID add  driver_info/ipmi_username=$s5_ipmi_username   \
 driver_info/ipmi_password=$s5_ipmi_password  driver_info/ipmi_address=$s5_ipmi_address \
@@ -182,7 +183,7 @@ ironic node-update $NODE5_UUID add properties/cpus=${VCPUS}  properties/memory_m
  properties/local_gb=${DISK} properties/cpu_arch=${HOST_CPU_ARCH}
 
 openstack --os-baremetal-api-version 1.21 baremetal node set $NODE5_UUID \
-  --resource-class  CUSTOM_BAREMETAL_NODE4_AI
+  --resource-class  CUSTOM_BAREMETAL_NODE5_AI
 
 ironic port-create -n $NODE5_UUID -a $s5_nic_mac_address
 
@@ -196,16 +197,16 @@ openstack server create --image my-image --flavor ai-bm-node5 \
 
 nova flavor-create ai-bm-node6 6 ${RAM} ${DISK} ${VCPUS}
 nova flavor-key ai-bm-node6 set cpu_arch=x86_64
-nova flavor-key ai-bm-node6 set resources:CUSTOM_BAREMETAL_NODE5_AI=1
+nova flavor-key ai-bm-node6 set resources:CUSTOM_BAREMETAL_NODE6_AI=1
 nova flavor-key ai-bm-node6 set resources:VCPU=0
 nova flavor-key ai-bm-node6 set resources:MEMORY_MB=0
 nova flavor-key ai-bm-node6 set resources:DISK_GB=0
 
 
 ironic node-create -d pxe_ipmitool  -n node6
-NODE1_UUID=$(ironic node-list|grep node6|awk -F "| " '{print $2}')
+NODE6_UUID=$(ironic node-list|grep node6|awk -F "| " '{print $2}')
 
-ironic node-update $NODE6_UUID add  driver_info/ipmi_username=$s6_ipmi_username   \
+ironic node-update $NODE6_UUID add driver_info/ipmi_username=$s6_ipmi_username   \
 driver_info/ipmi_password=$s6_ipmi_password  driver_info/ipmi_address=$s6_ipmi_address \
 driver_info/ipmi_terminal_port=623
 
@@ -216,7 +217,7 @@ ironic node-update $NODE6_UUID add properties/cpus=${VCPUS}  properties/memory_m
  properties/local_gb=${DISK} properties/cpu_arch=${HOST_CPU_ARCH}
 
 openstack --os-baremetal-api-version 1.21 baremetal node set $NODE6_UUID \
-  --resource-class  CUSTOM_BAREMETAL_NODE4_AI
+  --resource-class  CUSTOM_BAREMETAL_NODE6_AI
 
 ironic port-create -n $NODE6_UUID -a $s6_nic_mac_address
 
