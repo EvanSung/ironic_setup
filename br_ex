@@ -19,10 +19,6 @@ iface eth0 inet static
 #neutron
 #auto eth1
 #iface eth1 inet manual
-#up ip link set dev eth1 promisc on
-#up ip link set dev eth1 up
-#down ip link set dev eth1 down
-#down ip link set dev eth1 promisc off
 
 auto eth2
 iface eth2 inet manual
